@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\Project;
+use App\Http\Resources\Project as ProjectResource;
+
 
 class ProjectsController extends Controller
 {
@@ -16,7 +18,10 @@ class ProjectsController extends Controller
      */
     public function index()
     {
-        $projects = Project::all();
+
+        $user = auth()->user();
+
+        $projects = Project::where('user_id', $user->id)->select(['id', 'name', 'created_at'])->get();
 
         return $projects; // it will automatically convert to json format
     }
@@ -38,9 +43,10 @@ class ProjectsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Project $project)
     {
-        //
+        //return $project;
+        return new ProjectResource($project);
     }
 
     /**
