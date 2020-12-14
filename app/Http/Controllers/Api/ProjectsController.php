@@ -38,7 +38,9 @@ class ProjectsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $project = auth()->user()->projects()->create($request->all());
+
+        return new ProjectResource($project); 
     }
 
     /**
@@ -60,9 +62,10 @@ class ProjectsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Project $project)
     {
-        //
+        $project->update($request->all());
+        return new ProjectResource($project); 
     }
 
     /**
@@ -71,8 +74,13 @@ class ProjectsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Project $project)
     {
-        //
+        $project->delete();
+        return [
+
+            'status' => 'OK'
+
+        ]; 
     }
 }
