@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Project;
 use App\Http\Resources\Project as ProjectResource;
+use App\Http\Resources\ProjectCollection;
 
 
 class ProjectsController extends Controller
@@ -21,9 +22,12 @@ class ProjectsController extends Controller
 
         $user = auth()->user();
 
-        $projects = Project::where('user_id', $user->id)->select(['id', 'name', 'created_at'])->get();
+        $projects = Project::where('user_id', $user->id)
+        //->select(['id', 'name', 'created_at'])
+        ->paginate(); 
 
-        return $projects; // it will automatically convert to json format
+        //return $projects; // it will automatically convert to json format
+        return new ProjectCollection($projects); 
     }
 
     /**
