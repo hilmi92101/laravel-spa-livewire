@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Project;
 use App\Http\Resources\Project as ProjectResource;
 use App\Http\Resources\ProjectCollection;
-
+use App\Http\Requests\ProjectRequest;
 
 class ProjectsController extends Controller
 {
@@ -36,7 +36,7 @@ class ProjectsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProjectRequest $request)
     {
         $project = auth()->user()->projects()->create($request->all());
 
@@ -62,7 +62,7 @@ class ProjectsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Project $project)
+    public function update(ProjectRequest $request, Project $project)
     {
         $project->update($request->all());
         return new ProjectResource($project); 
