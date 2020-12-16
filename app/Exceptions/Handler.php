@@ -48,7 +48,7 @@ class Handler extends ExceptionHandler
             if($e instanceof \Illuminate\Validation\ValidationException){
                 return response([
                     'status' => 'error',
-                    'errors' => $e->errors(),
+                    'error' => $e->errors(),
 
                 ], 422);
             }
@@ -56,10 +56,37 @@ class Handler extends ExceptionHandler
             if($e instanceof \Illuminate\Auth\Access\AuthorizationException){
                 return response([
                     'status' => 'error',
-                    'errors' => $e->getMessage(),
+                    'error' => $e->getMessage(),
 
                 ], 403);
             }
+
+            if($e instanceof \Illuminate\Database\Eloquent\ModelNotFoundException || $e instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException){
+                return response([
+                    'status' => 'error',
+                    'error' => 'Resource Not Found',
+
+                ], 404);
+            }
+
+            // if token is wrong
+            if($e instanceof \Illuminate\Auth\AuthenticationException){
+                return response([
+                    'status' => 'error',
+                    'error' => $e->getMessage(),
+
+                ], 401);
+            }
+
+            // if none above exception is caught
+            return response([
+                'status' => 'error',
+                'error' => 'Something went wrong',
+
+            ], 500);
+            
+
+            
         }
 
         
