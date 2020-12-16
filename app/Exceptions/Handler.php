@@ -52,7 +52,19 @@ class Handler extends ExceptionHandler
 
                 ], 422);
             }
+
+            if($e instanceof \Illuminate\Auth\Access\AuthorizationException){
+                return response([
+                    'status' => 'error',
+                    'errors' => $e->getMessage(),
+
+                ], 403);
+            }
         }
+
+        
+
+
 
         parent::render($request, $e);
     }
