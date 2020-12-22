@@ -19,6 +19,10 @@ class TasksController extends Controller
      */
     public function store(TaskRequest $request)
     {
+        // Task::class let Laravel know to check the Task Policy
+        $this->authorize('create', [Task::class, $request->project_id]);
+
+
         $task = Task::create($request->all());
 
         return $task;
@@ -34,6 +38,8 @@ class TasksController extends Controller
      */
     public function update(TaskRequest $request, Task $task)
     {
+        
+        $this->authorize('update', $task);
         $task->update($request->all());
 
         return $task;
@@ -47,6 +53,8 @@ class TasksController extends Controller
      */
     public function destroy(Task $task)
     {
+
+        $this->authorize('delete', $task);
         $task->delete();
         return [
 
